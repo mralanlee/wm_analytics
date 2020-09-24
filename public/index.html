@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Web Monetization - Test Site</title>
+    <meta
+      name="monetization"
+      content="$ilp.uphold.com/mRjYMEwNk7E">
+  </head>
+  <body>
+    <script type="text/javascript">
+      if (document.monetization) {
+        document.monetization.addEventListener(
+          'monetizationstart',
+          e => {
+            console.log(ev.detail)
+          }
+        )
+      }
+    </script>
+  </body>
+</html>
