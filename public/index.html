@@ -4,15 +4,15 @@
     <title>Web Monetization - Test Site</title>
     <meta
       name="monetization"
-      content="$ilp.uphold.com/mRjYMEwNk7E">
+      content="$ilp.uphold.com/mRjYMEwNk7Ef">
   </head>
   <body>
     <script type="text/javascript">
       if (document.monetization) {
         document.monetization.addEventListener(
-          'monetizationstart',
+          'monetizationprogress',
           e => {
-            console.log(ev.detail)
+            console.log(e.detail)
           }
         )
       }
