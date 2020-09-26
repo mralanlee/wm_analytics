@@ -60,6 +60,18 @@ func (r *RedisClient) NewSubscriber(channel string, cb handler) *Subscriber {
 	return &sub
 }
 
+func (s *Subscriber) Listen() {
+	go func() {
+		for {
+			msg, _ := s.pubsub.ReceiveMessage(ctx)
+
+			go func() {
+				s.callback(msg)
+			}()
+		}
+	}()
+}
+
 func init() {
 	var config = &RedisConfig{
 		RedisHost:     redis_host,
@@ -79,17 +91,6 @@ func init() {
 		panic(err)
 	}
 
+	fmt.Println("Redis initialized")
 	Redis = &RedisClient{Client: client}
-}
-
-func (s *Subscriber) Listen() {
-	go func() {
-		for {
-			msg, _ := s.pubsub.ReceiveMessage(ctx)
-
-			go func() {
-				s.callback(msg)
-			}()
-		}
-	}()
 }
