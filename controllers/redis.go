@@ -6,10 +6,18 @@ import (
 	"os"
 
 	"github.com/go-redis/redis/v8"
+	"github.com/mralanlee/wm_analytics/common"
 )
 
+type RedisConfig struct {
+	RedisHost     string
+	RedisPort     string
+	RedisAddr     string
+	RedisPassword string
+}
+
 type RedisClient struct {
-	client *redis.Client
+	Client *redis.Client
 }
 
 type Subscriber struct {
@@ -17,22 +25,53 @@ type Subscriber struct {
 	callback handler
 }
 
-type handler func(string)
+type handler func(*redis.Message)
 
 var (
 	ctx        = context.Background()
 	redis_port = os.Getenv("REDIS_PORT")
 	redis_host = os.Getenv("REDIS_ADDRESS")
+	redis_pass = os.Getenv("REDIS_PASSWORD")
+	Redis      *RedisClient
 )
 
-var Redis *RedisClient
+func (c *RedisConfig) fill() {
+	if c.RedisHost == "" {
+		c.RedisHost = common.DEF_REDIS_HOST
+	}
+
+	if c.RedisPort == "" {
+		c.RedisPort = common.DEF_REDIS_PORT
+	}
+
+	if c.RedisPassword == "" {
+		c.RedisPassword = common.DEF_REDIS_PASSWORD
+	}
+
+	c.RedisAddr = fmt.Sprintf("%s:%s", c.RedisHost, c.RedisPort)
+}
+
+func (r *RedisClient) NewSubscriber(channel string, cb handler) *Subscriber {
+	sub := Subscriber{
+		pubsub:   r.Client.Subscribe(ctx, channel),
+		callback: cb,
+	}
+
+	return &sub
+}
 
 func init() {
-	redisAddress := fmt.Sprintf("%s:%s", redis_host, redis_port)
+	var config = &RedisConfig{
+		RedisHost:     redis_host,
+		RedisPort:     redis_port,
+		RedisPassword: redis_pass,
+	}
+
+	config.fill()
 
 	client := redis.NewClient(&redis.Options{
-		Addr:     redisAddress,
-		Password: "",
+		Addr:     config.RedisAddr,
+		Password: config.RedisPassword,
 		DB:       0,
 	})
 
@@ -40,12 +79,17 @@ func init() {
 		panic(err)
 	}
 
-	Redis = &RedisClient{client}
+	Redis = &RedisClient{Client: client}
 }
 
-// func NewSub(channel string) (*Subscriber, error) {
-// 	s := Subscriber{
-// 		pubsub: Redis.client.Subscribe(ctx, channel),
-// 	}
-// }
-//
+func (s *Subscriber) Listen() {
+	go func() {
+		for {
+			msg, _ := s.pubsub.ReceiveMessage(ctx)
+
+			go func() {
+				s.callback(msg)
+			}()
+		}
+	}()
+}
