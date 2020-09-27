@@ -37,15 +37,15 @@ var (
 
 func (c *RedisConfig) fill() {
 	if c.RedisHost == "" {
-		c.RedisHost = common.DEF_REDIS_HOST
+		c.RedisHost = common.REDIS_HOST
 	}
 
 	if c.RedisPort == "" {
-		c.RedisPort = common.DEF_REDIS_PORT
+		c.RedisPort = common.REDIS_PORT
 	}
 
 	if c.RedisPassword == "" {
-		c.RedisPassword = common.DEF_REDIS_PASSWORD
+		c.RedisPassword = common.REDIS_PASSWORD
 	}
 
 	c.RedisAddr = fmt.Sprintf("%s:%s", c.RedisHost, c.RedisPort)

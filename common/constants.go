@@ -1,7 +1,7 @@
 package common
 
 const (
-	DEF_REDIS_PORT     = "6379"
-	DEF_REDIS_HOST     = "localhost"
-	DEF_REDIS_PASSWORD = ""
+	REDIS_PORT     = "6379"
+	REDIS_HOST     = "localhost"
+	REDIS_PASSWORD = ""
 )
