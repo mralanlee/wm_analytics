@@ -13,6 +13,7 @@ type PostgresConfig struct {
 	PostgresUser string
 	PostgresPassword string
 	PostgresDatabase string
+	PostgresHost string
 	PostgresPort string
 	DSN string
 }
@@ -23,6 +24,7 @@ var (
 	postgres_user = os.Getenv("POSTGRES_USER")
 	postgres_pass = os.Getenv("POSTGRES_PASSWORD")
 	postgres_db = os.Getenv("POSTGRES_DBNAME")
+	postgres_host = os.Getenv("POSTGRES_HOST")
 	postgres_port = os.Getenv("POSTGRES_PORT")
 )
 
@@ -39,11 +41,15 @@ func (c *PostgresConfig) fill() {
 		c.PostgresDatabase = common.POSTGRES_DBNAME
 	}
 
+	if c.PostgresHost == "" {
+		c.PostgresHost = common.POSTGRES_HOST
+	}
+
 	if c.PostgresPort == "" {
 		c.PostgresPort = common.POSTGRES_PORT
 	}
 
-	c.DSN = fmt.Sprintf("user=%s password=%s dbname=%s port=%s", c.PostgresUser, c.PostgresPassword, c.PostgresDatabase, c.PostgresPort)
+	c.DSN = fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=%s", c.PostgresUser, c.PostgresPassword, c.PostgresDatabase, c.PostgresHost, c.PostgresPort)
 }
 
 func init() {
@@ -51,6 +57,7 @@ func init() {
 		PostgresUser: postgres_user,
 		PostgresPassword: postgres_pass,
 		PostgresDatabase: postgres_db,
+		PostgresHost: postgres_host,
 		PostgresPort: postgres_port,
 	}
 
