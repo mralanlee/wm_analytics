@@ -10,6 +10,7 @@ import (
 
 
 type PaymentDetail struct {
+	UrlPath string `json:"urlPath"`
 	PaymentPointer string `json:"paymentPointer"`
 	RequestID string `json:"requestId"`
 	Amount string `json:"amount"`
