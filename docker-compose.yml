@@ -9,8 +9,9 @@ services:
   postgres:
     image: postgres
     environment:
-      - POSTGRES_USER: postgres
-      - POSTGRES_PASSWORD: asdf1234
-      - POSTGRES_DB: payments
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=asdf1234
+      - POSTGRES_DB=payments
+    restart: always
     ports:
       - "5432:5432"
