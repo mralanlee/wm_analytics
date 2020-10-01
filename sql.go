@@ -69,5 +69,7 @@ func init() {
 		panic(err)
 	}
 
+	db.AutoMigrate(&PaymentDetail{})
+
 	PostgresClient = db
 }
