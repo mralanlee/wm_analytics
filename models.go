@@ -1,6 +1,9 @@
 package main
 
 import (
+	"log"
+	"math"
+	"strconv"
 	"time"
 )
 
@@ -14,4 +17,17 @@ type PaymentDetail struct {
 	AssetCode string `json:"assetCode"`
 	AssetScale int `json:"assetScale"`
 	Receipt string `json:"receipt"`
+	AmountValue float64
+}
+
+func (p *PaymentDetail) transform() {
+	amount, err := strconv.ParseFloat(p.Amount, 32)
+	scale := math.Pow10(p.AssetScale)
+
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	p.AmountValue	= amount / scale
 }

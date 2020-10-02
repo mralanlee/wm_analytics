@@ -34,6 +34,8 @@ func payments(w http.ResponseWriter, r *http.Request) {
 			log.Println("json parse:", jsonErr)
 		}
 
+		payDetails.transform()
+
 		PostgresClient.Create(&payDetails)
 	}
 }
