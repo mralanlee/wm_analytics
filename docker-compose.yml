@@ -20,9 +20,12 @@ services:
 
   grafana:
     image: grafana/grafana:latest
+    volumes:
+      - grafana-storage:/var/lib/grafana
     links:
       - postgres
     ports:
       - "5000:3000"
-    volumes:
-      - ./docker_volumes/grafana/data:/var/lib/grafana
+
+volumes:
+  grafana-storage:
