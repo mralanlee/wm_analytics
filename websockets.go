@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/mralanlee/wm_analytics/consumers"
 	"github.com/gorilla/websocket"
 )
 
@@ -26,7 +27,7 @@ func payments(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 
-		var payDetails PaymentDetail
+		var payDetails consumers.PaymentDetail
 
 		jsonErr := json.Unmarshal(raw, &payDetails)
 
@@ -34,8 +35,8 @@ func payments(w http.ResponseWriter, r *http.Request) {
 			log.Println("json parse:", jsonErr)
 		}
 
-		payDetails.transform()
+		payDetails.Transform()
 
-		PostgresClient.Create(&payDetails)
+		consumers.PostgresClient.Create(&payDetails)
 	}
 }
