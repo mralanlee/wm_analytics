@@ -20,7 +20,7 @@ type PaymentDetail struct {
 	AmountValue float64
 }
 
-func (p *PaymentDetail) transform() {
+func (p *PaymentDetail) Transform() {
 	amount, err := strconv.ParseFloat(p.Amount, 32)
 	scale := math.Pow10(p.AssetScale)
 
