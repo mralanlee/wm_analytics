@@ -8,17 +8,6 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-
-type PaymentDetail struct {
-	PaymentPointer string `json:"paymentPointer"`
-	RequestID string `json:"requestId"`
-	Amount string `json:"amount"`
-	AssetCode string `json:"assetCode"`
-	AssetScale int `json:"assetScale"`
-	Receipt string `json:"receipt"`
-}
-
-
 var upgrader = websocket.Upgrader{}
 
 func payments(w http.ResponseWriter, r *http.Request) {
@@ -45,6 +34,6 @@ func payments(w http.ResponseWriter, r *http.Request) {
 			log.Println("json parse:", jsonErr)
 		}
 
-		log.Println(payDetails)
+		PostgresClient.Create(&payDetails)
 	}
 }
