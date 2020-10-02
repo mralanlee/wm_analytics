@@ -14,7 +14,7 @@ services:
       - POSTGRES_DB=payments
     restart: always
     volumes:
-      - ./docker/postgres:/var/lib/postgres/data
+      - ./docker_volumes/postgres:/var/lib/postgres/data
     ports:
       - "5432:5432"
 
@@ -25,4 +25,4 @@ services:
     ports:
       - "5000:3000"
     volumes:
-      - ./docker/grafana/data:/var/lib/grafana
+      - ./docker_volumes/grafana/data:/var/lib/grafana
