@@ -1,0 +1,7 @@
+version: '3.4'
+services:
+  mock_client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    entrypoint: ["./client", "-addr=localhost:3000"]
