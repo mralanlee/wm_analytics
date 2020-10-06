@@ -13,6 +13,15 @@ Here is the web monetization [explainer](https://webmonetization.org/docs/explai
 ## Goal of this project
 The goal is to showcase the _value_ of web monetization and to attribute or correlate performance of monetization to content. With this in mind, for future potential features or pull request submissions, we will always respect the user's privacy and prohibit the collection of user data.
 
+## How This Works (Currently)
+A client, the browser, will open a web sockets connection with the metrics server and stream the incoming `event.details` objects to the server. This is not the most ideal strategy, because it would require a sticky session to a particular service.
+Other considerations that I've had for this was to use the following:
+- Redis PubSub
+- RabbitMQ
+- gRPC (unfortunately, would also sticky session)
+
+If there is a better approach, please submit a proposal via an issue.
+
 ## Contributing
 
 **Dependencies**:
