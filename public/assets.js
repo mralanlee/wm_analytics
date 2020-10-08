@@ -10,12 +10,12 @@ document.monetization.addEventListener(
   e => {
     if (socket.readyState === 1) {
       const { detail } = e;
-      const payload = {
+      const payments = {
         ...detail,
         urlPath,
       };
 
-      socket.send(JSON.stringify(payload))
+      socket.send(JSON.stringify(payments))
     } else if (socket.readyState === 2 || socket.readyState === 3) {
       console.log("WebSocket Connection is closed");
     } else {
