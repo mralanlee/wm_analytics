@@ -9,7 +9,7 @@ import (
 
 type PaymentDetail struct {
 	ID             uint      `gorm:"primaryKey"`
-	CreatedAt      time.Time `json:"timestamp"`
+	ReceivedAt 		 time.Time `json:"receivedAt"`
 	UrlPath        string    `json:"urlPath" gorm:"index"`
 	PaymentPointer string    `json:"paymentPointer"`
 	RequestID      string    `json:"requestId"`
@@ -21,7 +21,7 @@ type PaymentDetail struct {
 }
 
 type Payments struct {
-	Payments []PaymentDetail `json:"payments"`
+	Details []PaymentDetail `json:"payments"`
 }
 
 func (d *PaymentDetail) Transform() {
