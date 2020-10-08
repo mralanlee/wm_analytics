@@ -1,4 +1,4 @@
-package consumers 
+package consumers
 
 import (
 	"log"
@@ -8,26 +8,36 @@ import (
 )
 
 type PaymentDetail struct {
-	ID uint `gorm:"primaryKey"`
-	CreatedAt time.Time
-	UrlPath string `json:"urlPath" gorm:"index"`
-	PaymentPointer string `json:"paymentPointer"`
-	RequestID string `json:"requestId"`
-	Amount string `json:"amount"`
-	AssetCode string `json:"assetCode"`
-	AssetScale int `json:"assetScale"`
-	Receipt string `json:"receipt"`
-	AmountValue float64
+	ID             uint      `gorm:"primaryKey"`
+	ReceivedAt 		 time.Time `json:"receivedAt"`
+	UrlPath        string    `json:"urlPath" gorm:"index"`
+	PaymentPointer string    `json:"paymentPointer"`
+	RequestID      string    `json:"requestId"`
+	Amount         string    `json:"amount"`
+	AssetCode      string    `json:"assetCode"`
+	AssetScale     int       `json:"assetScale"`
+	Receipt        string    `json:"receipt"`
+	AmountValue    float64   `json:"amountValue"`
 }
 
-func (p *PaymentDetail) Transform() {
-	amount, err := strconv.ParseFloat(p.Amount, 32)
-	scale := math.Pow10(p.AssetScale)
+type Payments struct {
+	Details []PaymentDetail `json:"payments"`
+}
+
+func (d *PaymentDetail) Transform() {
+	amount, err := strconv.ParseFloat(d.Amount, 32)
+	scale := math.Pow10(d.AssetScale)
 
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
 
-	p.AmountValue	= amount / scale
+	d.AmountValue = (amount / scale)
+}
+
+func (p *Payments) TransformAll () {
+	for _, v := range p.Details {
+		v.Transform()
+	}
 }
