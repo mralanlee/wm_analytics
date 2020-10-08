@@ -28,21 +28,23 @@ document.monetization.addEventListener(
       ...detail,
       urlPath,
       receivedAt,
+      amountValue: calculateAmount(detail.amount, detail.assetScale)
     };
 
     paymentStore.push(payload);
-    setInterval(sendPaymentDetails(true), 5000)
   }
 )
 
 document.monetization.addEventListener(
   'monetizationstop',
   e => {
+    SEND_PAYMENTS = false;
     sendPaymentDetails()
   }
 )
 
 function sendPaymentDetails(batched = false) {
+  console.log("Running")
   let data = {
     payments: batched ? paymentStore.splice(0, BATCH) : paymentStore,
   }
@@ -60,3 +62,8 @@ function sendPaymentDetails(batched = false) {
   .catch(err => console.log(err.message));
 }
 
+function handler() {
+  if (SEND_PAYMENTS) {
+    sendPaymentDetails(true)
+  }
+}
