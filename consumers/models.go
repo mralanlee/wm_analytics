@@ -17,7 +17,7 @@ type PaymentDetail struct {
 	AssetCode      string    `json:"assetCode"`
 	AssetScale     int       `json:"assetScale"`
 	Receipt        string    `json:"receipt"`
-	AmountValue    float64
+	AmountValue    float64   `json:"amountValue"`
 }
 
 type Payments struct {
@@ -33,5 +33,11 @@ func (d *PaymentDetail) Transform() {
 		return
 	}
 
-	d.AmountValue = amount / scale
+	d.AmountValue = (amount / scale)
+}
+
+func (p *Payments) TransformAll () {
+	for _, v := range p.Details {
+		v.Transform()
+	}
 }
