@@ -26,18 +26,14 @@ func capturePayments(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for _, v := range p.Details {
-		go func(detail *consumers.PaymentDetail) {
-			detail.Transform()
-			result := consumers.PostgresClient.Create(detail)
+	result := consumers.PostgresClient.Create(&p.Details)
 
-			if result.Error != nil {
-				log.Fatal(result.Error)
-				http.Error(w, "Error processing transaction", http.StatusInternalServerError)
-				return
-			}
-		}(&v)
+	if result.Error != nil {
+		log.Fatal(result.Error)
+		http.Error(w, "Error processing transaction", http.StatusInternalServerError)
+		return
 	}
+
 
 	w.WriteHeader(200)
 }
